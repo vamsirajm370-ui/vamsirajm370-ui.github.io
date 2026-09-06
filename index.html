@@ -7,27 +7,57 @@
 <meta name="description" content="Vamsi Maganti — Sr AI Lead Engineer. Salesforce architecture, Agentforce & agentic automation. Austin, TX.">
 <style>
   :root{
-    --bg:#f7f7f5;
+    --bg:#f6f6f2;
     --bg-elevated:#ffffff;
-    --fg:#1b1b18;
-    --fg-dim:#5b5b55;
-    --border:#dcdcd6;
-    --accent:#0f5132;
-    --accent-soft:#e6f0ea;
+    --fg:#17170f;
+    --fg-dim:#4c4c43;
+    --border:#d7d7cd;
+    --border-strong:#b9b9ac;
+    --accent:#0b6b3a;
+    --accent-strong:#084d29;
+    --accent-soft:#e3f1e8;
+    --gold:#9a6400;
+    --gold-soft:#fbf0d9;
+    --hl-bg:#fff3b0;
+    --hl-fg:#4a3b00;
+    --code-fg:#0b6b3a;
+    --shadow: 0 1px 3px rgba(20,20,10,0.06), 0 1px 2px rgba(20,20,10,0.08);
     --mono: "SF Mono", "IBM Plex Mono", "JetBrains Mono", Menlo, Consolas, monospace;
     --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    --radius: 6px;
+    --radius: 8px;
   }
   @media (prefers-color-scheme: dark){
     :root{
-      --bg:#111312;
-      --bg-elevated:#181b19;
-      --fg:#e9e9e4;
-      --fg-dim:#9a9a92;
-      --border:#2c2f2c;
-      --accent:#5fcf9a;
-      --accent-soft:#16261f;
+      --bg:#0f1210;
+      --bg-elevated:#181c19;
+      --fg:#f0f0e8;
+      --fg-dim:#b7b7ab;
+      --border:#33372f;
+      --border-strong:#474c40;
+      --accent:#4fd88f;
+      --accent-strong:#7fe6ad;
+      --accent-soft:#132a1d;
+      --gold:#ecb84a;
+      --gold-soft:#2a2210;
+      --hl-bg:#4a3d00;
+      --hl-fg:#ffe680;
+      --code-fg:#4fd88f;
+      --shadow: 0 1px 3px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.3);
     }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0f1210; --bg-elevated:#181c19; --fg:#f0f0e8; --fg-dim:#b7b7ab;
+    --border:#33372f; --border-strong:#474c40; --accent:#4fd88f; --accent-strong:#7fe6ad;
+    --accent-soft:#132a1d; --gold:#ecb84a; --gold-soft:#2a2210;
+    --hl-bg:#4a3d00; --hl-fg:#ffe680; --code-fg:#4fd88f;
+    --shadow: 0 1px 3px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.3);
+  }
+  :root[data-theme="light"]{
+    --bg:#f6f6f2; --bg-elevated:#ffffff; --fg:#17170f; --fg-dim:#4c4c43;
+    --border:#d7d7cd; --border-strong:#b9b9ac; --accent:#0b6b3a; --accent-strong:#084d29;
+    --accent-soft:#e3f1e8; --gold:#9a6400; --gold-soft:#fbf0d9;
+    --hl-bg:#fff3b0; --hl-fg:#4a3b00; --code-fg:#0b6b3a;
+    --shadow: 0 1px 3px rgba(20,20,10,0.06), 0 1px 2px rgba(20,20,10,0.08);
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -35,47 +65,75 @@
     background:var(--bg);
     color:var(--fg);
     font-family:var(--sans);
-    line-height:1.55;
+    font-size:16.5px;
+    line-height:1.68;
     -webkit-font-smoothing:antialiased;
   }
-  a{color:var(--accent);text-decoration:none;}
-  a:hover{text-decoration:underline;}
+  a{color:var(--accent-strong);text-decoration:underline;text-decoration-color:var(--border-strong);text-underline-offset:2px;font-weight:600;}
+  a:hover{text-decoration-color:currentColor;}
   code, .mono{font-family:var(--mono);}
+  code{
+    background:var(--accent-soft);
+    color:var(--code-fg);
+    padding:2px 6px;
+    border-radius:4px;
+    font-size:0.92em;
+  }
+  mark, .hl{
+    background:var(--hl-bg);
+    color:var(--hl-fg);
+    padding:1px 6px;
+    border-radius:4px;
+    font-weight:700;
+    box-decoration-break:clone;
+    -webkit-box-decoration-break:clone;
+  }
   .wrap{
     max-width:880px;
     margin:0 auto;
     padding:0 24px 80px;
   }
   header.hero{
-    padding:48px 0 24px;
+    padding:52px 0 26px;
     border-bottom:1px solid var(--border);
   }
   header.hero .kicker{
     font-family:var(--mono);
     font-size:13px;
+    font-weight:700;
     letter-spacing:.08em;
     text-transform:uppercase;
-    color:var(--accent);
-    margin-bottom:10px;
+    color:var(--accent-strong);
+    margin-bottom:12px;
   }
   header.hero h1{
-    font-size:clamp(28px, 4vw, 40px);
-    margin:0 0 8px;
+    font-size:clamp(28px, 4vw, 42px);
+    margin:0 0 12px;
     letter-spacing:-0.01em;
+    line-height:1.15;
   }
   header.hero .role{
-    font-size:17px;
-    color:var(--fg-dim);
-    margin:0 0 18px;
-    max-width:640px;
+    font-size:18px;
+    color:var(--fg);
+    margin:0 0 20px;
+    max-width:660px;
   }
   header.hero .meta{
     font-family:var(--mono);
-    font-size:13px;
+    font-size:13.5px;
+    font-weight:600;
     color:var(--fg-dim);
     display:flex;
     flex-wrap:wrap;
-    gap:6px 18px;
+    gap:8px 10px;
+    align-items:center;
+  }
+  header.hero .meta .sep{color:var(--border-strong);}
+  header.hero .meta .badge{
+    background:var(--accent-soft);
+    color:var(--accent-strong);
+    border-radius:999px;
+    padding:4px 10px;
   }
   nav.tabs{
     position:sticky;
@@ -87,28 +145,33 @@
     white-space:nowrap;
     -ms-overflow-style:none;
     scrollbar-width:none;
+    box-shadow:var(--shadow);
   }
   nav.tabs::-webkit-scrollbar{display:none;}
-  nav.tabs .wrap{padding:0 24px;display:flex;gap:2px;}
+  nav.tabs .wrap{padding:8px 24px;display:flex;gap:4px;}
   nav.tabs button{
     font-family:var(--mono);
-    font-size:13px;
+    font-size:13.5px;
+    font-weight:600;
     background:none;
-    border:none;
-    border-bottom:2px solid transparent;
+    border:1px solid transparent;
+    border-radius:999px;
     color:var(--fg-dim);
-    padding:14px 12px;
+    padding:9px 14px;
     cursor:pointer;
     white-space:nowrap;
+    transition:background .12s ease, color .12s ease, border-color .12s ease;
   }
-  nav.tabs button:hover{color:var(--fg);}
+  nav.tabs button:hover{color:var(--fg);background:var(--bg-elevated);border-color:var(--border);}
+  nav.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
   nav.tabs button.active{
-    color:var(--accent);
-    border-bottom-color:var(--accent);
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+    border-color:var(--accent);
   }
   section.panel{
     display:none;
-    padding:40px 0 8px;
+    padding:44px 0 8px;
     animation:fade .15s ease-in;
   }
   section.panel.active{display:block;}
@@ -116,143 +179,181 @@
   .section-title{
     font-family:var(--mono);
     font-size:13px;
+    font-weight:700;
     letter-spacing:.06em;
     text-transform:uppercase;
-    color:var(--fg-dim);
-    margin:0 0 22px;
-    padding-bottom:10px;
-    border-bottom:1px solid var(--border);
+    color:var(--gold);
+    margin:0 0 24px;
+    padding-bottom:12px;
+    border-bottom:2px solid var(--border);
   }
-  h2{font-size:22px;margin:32px 0 12px;}
+  h2{font-size:23px;margin:34px 0 14px;letter-spacing:-0.01em;}
   h2:first-of-type{margin-top:0;}
-  h3{font-size:16px;margin:24px 0 8px;color:var(--fg);}
-  p{margin:0 0 14px;color:var(--fg);}
-  .lead{font-size:17px;color:var(--fg);}
-  ul.bullets{margin:0 0 16px;padding-left:20px;}
-  ul.bullets li{margin-bottom:8px;}
+  h2::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:10px;vertical-align:middle;}
+  h3{font-size:16px;margin:26px 0 10px;color:var(--accent-strong);font-weight:700;}
+  p{margin:0 0 15px;color:var(--fg);max-width:70ch;}
+  .lead{font-size:18.5px;color:var(--fg);font-weight:500;}
+  ul.bullets{margin:0 0 18px;padding-left:22px;max-width:70ch;}
+  ul.bullets li{margin-bottom:10px;}
+  ul.bullets li strong.term{color:var(--accent-strong);}
   .callout{
     background:var(--accent-soft);
-    border:1px solid var(--border);
+    border:1px solid var(--accent);
+    border-left:4px solid var(--accent);
     border-radius:var(--radius);
-    padding:18px 20px;
-    margin:18px 0;
+    padding:18px 22px;
+    margin:20px 0;
+    box-shadow:var(--shadow);
   }
   .callout p:last-child{margin-bottom:0;}
   .diagram{
     font-family:var(--mono);
-    font-size:12.5px;
-    line-height:1.5;
+    font-size:12.8px;
+    line-height:1.6;
     background:var(--bg-elevated);
     border:1px solid var(--border);
     border-radius:var(--radius);
-    padding:20px;
+    padding:22px;
     overflow-x:auto;
     white-space:pre;
-    margin:18px 0;
+    margin:20px 0;
+    box-shadow:var(--shadow);
   }
+  .diagram .d-step{color:var(--gold);font-weight:700;}
+  .diagram .d-node{color:var(--accent-strong);font-weight:700;}
+  .diagram .d-arrow{color:var(--border-strong);}
+  .diagram .d-note{color:var(--fg-dim);}
   .diagram-caption{
     font-family:var(--mono);
-    font-size:12px;
+    font-size:12.5px;
     color:var(--fg-dim);
-    margin-top:-8px;
-    margin-bottom:20px;
+    margin-top:-10px;
+    margin-bottom:22px;
   }
   .metrics{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
     gap:14px;
-    margin:20px 0;
+    margin:22px 0;
   }
   .metric{
     background:var(--bg-elevated);
     border:1px solid var(--border);
+    border-top:3px solid var(--gold);
     border-radius:var(--radius);
-    padding:14px 16px;
+    padding:16px 18px;
+    box-shadow:var(--shadow);
   }
   .metric .num{
     font-family:var(--mono);
-    font-size:20px;
-    color:var(--accent);
+    font-size:22px;
+    font-weight:700;
+    color:var(--gold);
     display:block;
+    margin-bottom:2px;
   }
   .metric .label{
-    font-size:12.5px;
+    font-size:13px;
     color:var(--fg-dim);
+    font-weight:500;
   }
-  .tag-row{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 22px;}
+  .tag-row{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 24px;}
   .tag{
     font-family:var(--mono);
     font-size:12.5px;
-    background:var(--bg-elevated);
-    border:1px solid var(--border);
+    font-weight:600;
+    background:var(--accent-soft);
+    border:1px solid var(--accent);
     border-radius:999px;
-    padding:5px 12px;
-    color:var(--fg-dim);
+    padding:6px 13px;
+    color:var(--accent-strong);
   }
   table.stack{
     width:100%;
     border-collapse:collapse;
-    margin:8px 0 28px;
+    margin:10px 0 30px;
     font-size:14.5px;
+    box-shadow:var(--shadow);
+    border-radius:var(--radius);
+    overflow:hidden;
   }
   table.stack th{
     text-align:left;
     font-family:var(--mono);
     font-size:12px;
+    font-weight:700;
     text-transform:uppercase;
     letter-spacing:.04em;
-    color:var(--fg-dim);
-    border-bottom:1px solid var(--border);
-    padding:8px 10px 8px 0;
+    color:var(--bg-elevated);
+    background:var(--accent-strong);
+    padding:10px 14px;
   }
   table.stack td{
-    padding:10px 10px 10px 0;
+    padding:12px 14px;
     border-bottom:1px solid var(--border);
+    background:var(--bg-elevated);
     vertical-align:top;
   }
+  table.stack tr:nth-child(even) td{background:var(--accent-soft);}
   table.stack tr:last-child td{border-bottom:none;}
+  table.stack td:first-child{font-weight:700;color:var(--gold);white-space:nowrap;}
   ul.cert-list{list-style:none;margin:0;padding:0;}
   ul.cert-list li{
     display:flex;
     justify-content:space-between;
+    align-items:center;
     gap:16px;
-    padding:12px 0;
-    border-bottom:1px solid var(--border);
+    padding:14px 16px;
+    margin-bottom:8px;
+    background:var(--bg-elevated);
+    border:1px solid var(--border);
+    border-left:4px solid var(--accent);
+    border-radius:6px;
     font-size:14.5px;
+    font-weight:600;
+    box-shadow:var(--shadow);
   }
-  ul.cert-list li:last-child{border-bottom:none;}
+  ul.cert-list li::before{content:"✓";color:var(--accent-strong);font-weight:900;margin-right:10px;}
+  ul.cert-list .cert-name{flex:1;}
   ul.cert-list .cert-date{
     font-family:var(--mono);
     font-size:12.5px;
-    color:var(--fg-dim);
+    font-weight:700;
+    color:var(--gold);
+    background:var(--gold-soft);
+    border-radius:999px;
+    padding:4px 10px;
     white-space:nowrap;
   }
   .link-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
     gap:14px;
-    margin:18px 0;
+    margin:20px 0;
   }
   .link-card{
     display:block;
     background:var(--bg-elevated);
     border:1px solid var(--border);
     border-radius:var(--radius);
-    padding:16px 18px;
+    padding:18px 20px;
+    box-shadow:var(--shadow);
+    transition:transform .12s ease, border-color .12s ease;
   }
-  .link-card:hover{border-color:var(--accent);text-decoration:none;}
+  .link-card:hover{border-color:var(--accent);text-decoration:none;transform:translateY(-2px);}
   .link-card .link-label{
     font-family:var(--mono);
     font-size:12px;
-    color:var(--fg-dim);
+    font-weight:700;
+    color:var(--gold);
     text-transform:uppercase;
     letter-spacing:.05em;
-    margin-bottom:4px;
+    margin-bottom:6px;
   }
-  .link-card .link-value{font-size:15px;color:var(--fg);}
+  .link-card .link-value{font-size:15.5px;color:var(--fg);font-weight:700;text-decoration:none;}
   footer{
-    margin-top:60px;
-    padding-top:20px;
+    margin-top:64px;
+    padding-top:22px;
     border-top:1px solid var(--border);
     font-family:var(--mono);
     font-size:12.5px;
@@ -266,15 +367,18 @@
     font-style:normal;
     font-family:var(--mono);
     font-size:13.5px;
-    color:var(--fg-dim);
-    border-left:2px solid var(--accent);
-    padding-left:14px;
-    margin:18px 0;
+    color:var(--fg);
+    background:var(--gold-soft);
+    border-left:3px solid var(--gold);
+    padding:12px 16px;
+    border-radius:0 6px 6px 0;
+    margin:20px 0;
   }
   @media (max-width:600px){
     .wrap{padding:0 16px 60px;}
-    header.hero{padding:32px 0 20px;}
-    nav.tabs .wrap{padding:0 16px;}
+    header.hero{padding:36px 0 22px;}
+    nav.tabs .wrap{padding:6px 16px;}
+    body{font-size:16px;}
   }
 </style>
 </head>
@@ -287,10 +391,10 @@
     <p class="role">Sr AI Lead Engineer — Agentforce &amp; AI-Driven Automation · Salesforce Architecture · 10+ years on the Salesforce platform, currently applying that depth to what it takes to let an AI agent safely act on production data.</p>
     <div class="meta">
       <span>KUKA · Austin, TX (Remote) · since Oct 2017</span>
-      <span>·</span>
+      <span class="sep">·</span>
       <span>Sole architect, my.kuka.com</span>
-      <span>·</span>
-      <span>Open to new roles</span>
+      <span class="sep">·</span>
+      <span class="badge">Open to new roles</span>
     </div>
   </div>
 </header>
@@ -313,7 +417,7 @@
   <section class="panel active" id="about">
     <div class="section-title">00 · About Me</div>
     <p class="lead">I've spent the last decade building on Salesforce — architecture, integrations, security, and the unglamorous governance work that keeps a platform trustworthy at scale. For the last year that work has been pointed at a new problem: what changes when the thing calling your APIs is an AI agent instead of a person clicking a button.</p>
-    <p>I'm not coming to AI as a research background or a claimed AI veteran — I'm a Salesforce architect who's spent 10+ years learning what "safe to write to production" actually requires, and I'm now applying that discipline to Agentforce and agentic automation. The throughline is the same in both worlds: idempotency, validation, approval gates, and rollback aren't AI features, they're the price of admission for letting anything — human or agent — touch a system of record.</p>
+    <p>I'm not coming to AI as a research background or a claimed AI veteran — I'm a Salesforce architect who's spent <span class="hl">10+ years</span> learning what "safe to write to production" actually requires, and I'm now applying that discipline to Agentforce and agentic automation. The throughline is the same in both worlds: <span class="hl">idempotency</span>, <span class="hl">validation</span>, <span class="hl">approval gates</span>, and <span class="hl">rollback</span> aren't AI features, they're the price of admission for letting anything — human or agent — touch a system of record.</p>
     <div class="callout">
       <p><strong>Currently:</strong> Sr AI Lead Engineer at KUKA, Austin TX (remote), since October 2017 — sole architect for my.kuka.com, KUKA's global partner community platform, now extending it into Agentforce-driven automation.</p>
     </div>
@@ -323,8 +427,8 @@
   <section class="panel" id="arc">
     <div class="section-title">01 · Career Arc</div>
     <h2>From configuring the platform to architecting it</h2>
-    <p>My path through Salesforce followed the usual widening arc: administration and app building first, then declarative and programmatic development, then consulting-grade certifications across the clouds (Sales, Service, CPQ, Experience), and eventually full ownership of architecture, security, and integration for a platform used by over 100,000 people.</p>
-    <p>KUKA has been the constant since October 2017. Over that time the scope grew from building on Salesforce to being responsible for it — the integrations that keep robot shipment, warranty, and licensing data in sync across systems; the async processing that lets that happen at scale without blocking users; and the access-control and audit-trail decisions that make the platform something compliance can sign off on.</p>
+    <p>My path through Salesforce followed the usual widening arc: administration and app building first, then declarative and programmatic development, then consulting-grade certifications across the clouds (Sales, Service, CPQ, Experience), and eventually full ownership of architecture, security, and integration for a platform used by over <span class="hl">100,000 people</span>.</p>
+    <p>KUKA has been the constant since October 2017. Over that time the scope grew from building on Salesforce to being responsible for it — the integrations that keep robot shipment, warranty, and licensing data in sync across systems; the async processing that lets that happen at scale without blocking users; and the <span class="hl">access-control</span> and <span class="hl">audit-trail</span> decisions that make the platform something compliance can sign off on.</p>
     <h2>Why Agentforce, and why now</h2>
     <p>Agentic automation is a natural extension of that governance work, not a departure from it. An AI agent that can write to Salesforce is, from an architecture standpoint, just another caller — and every caller needs the same guardrails: don't duplicate a side effect on retry, don't let bad input reach the database, don't let a large or unusual action execute unsupervised, and don't leave the org in a half-written state if something fails partway through. I've built that pattern for human-facing integrations for years; I'm now building it explicitly for agent-facing ones.</p>
     <p class="principal">This is an early-career pivot into AI-driven automation grounded in a decade of Salesforce architecture — not a claim of deep AI/ML research experience.</p>
@@ -342,16 +446,16 @@
     </div>
 
     <h3>Integrations</h3>
-    <p>Built and maintain the integrations connecting Salesforce to SAP, Visual Components, and IQWorks to support robot shipment, warranty, and license workflows — keeping partner-facing data consistent with the systems of record behind it.</p>
+    <p>Built and maintain the integrations connecting Salesforce to <span class="hl">SAP</span>, <span class="hl">Visual Components</span>, and <span class="hl">IQWorks</span> to support robot shipment, warranty, and license workflows — keeping partner-facing data consistent with the systems of record behind it.</p>
 
     <h3>License &amp; entitlement management</h3>
-    <p>Replaced a manual, spreadsheet-and-email process for granting and tracking software licenses and entitlements with an automated system built for idempotency and auditability — every grant traceable, every request safe to retry without duplicating a license.</p>
+    <p>Replaced a manual, spreadsheet-and-email process for granting and tracking software licenses and entitlements with an automated system built for <span class="hl">idempotency</span> and <span class="hl">auditability</span> — every grant traceable, every request safe to retry without duplicating a license.</p>
 
     <h3>Platform engineering</h3>
     <ul class="bullets">
-      <li>Async Apex — Batch, Queueable, and Future — to keep long-running or high-volume work off the synchronous request path.</li>
-      <li>JWT-secured file handling for partner document and asset exchange.</li>
-      <li>Ownership of security, scalability, and compliance governance: access control, audit trails, and approval workflows across the platform.</li>
+      <li><strong class="term">Async Apex</strong> — Batch, Queueable, and Future — to keep long-running or high-volume work off the synchronous request path.</li>
+      <li><strong class="term">JWT-secured file handling</strong> for partner document and asset exchange.</li>
+      <li><strong class="term">Security &amp; compliance governance</strong> — access control, audit trails, and approval workflows across the platform.</li>
     </ul>
 
     <h3>Where it's heading</h3>
@@ -364,24 +468,31 @@
     <h2>A generic, from-scratch rebuild of the governance pattern above</h2>
     <p>Client work isn't public, so I rebuilt the core governance pattern behind the my.kuka.com entitlement system as a standalone, generic SFDX package — no client code, no client data, just the pattern: how to let an agent request a write, and how to make sure that write is safe.</p>
 
-    <div class="diagram">Agentforce Topic / Flow
-        │
-        ▼
-GrantEntitlementAction        (@InvocableMethod — Flow &amp; Agentforce entry point)
-        │
-        ▼
-EntitlementService ─────────────────────────────┐
-   1. Idempotency check   (replay-safe on retry) │
-   2. Validation           (EntitlementValidator)│
-   3. Approval-threshold gate (large requests →  │
-      "Pending Approval", not auto-executed)     │
-   4. Savepoint / rollback on failure             │
-        │                                         │
-        ▼                                         │
-Committed, audited entitlement write  ◀───────────┘</div>
+    <div class="diagram"><span class="d-node">Agentforce Topic / Flow</span>
+        <span class="d-arrow">│</span>
+        <span class="d-arrow">▼</span>
+<span class="d-node">GrantEntitlementAction</span>        <span class="d-note">(@InvocableMethod — Flow &amp; Agentforce entry point)</span>
+        <span class="d-arrow">│</span>
+        <span class="d-arrow">▼</span>
+<span class="d-node">EntitlementService</span> <span class="d-arrow">─────────────────────────────┐</span>
+   <span class="d-step">1.</span> Idempotency check   <span class="d-note">(replay-safe on retry)</span> <span class="d-arrow">│</span>
+   <span class="d-step">2.</span> Validation           <span class="d-note">(EntitlementValidator)</span><span class="d-arrow">│</span>
+   <span class="d-step">3.</span> Approval-threshold gate <span class="d-note">(large requests →</span>  <span class="d-arrow">│</span>
+      <span class="d-note">"Pending Approval", not auto-executed)</span>     <span class="d-arrow">│</span>
+   <span class="d-step">4.</span> Savepoint / rollback on failure             <span class="d-arrow">│</span>
+        <span class="d-arrow">│</span>                                         <span class="d-arrow">│</span>
+        <span class="d-arrow">▼</span>                                         <span class="d-arrow">│</span>
+<span class="d-node">Committed, audited entitlement write</span>  <span class="d-arrow">◀───────────┘</span></div>
     <div class="diagram-caption">The agent only ever sees a typed Request in / Result out — it never touches the object or SOQL directly.</div>
 
-    <p>The point isn't the AI call, which is a single <code>@InvocableMethod</code>. The point is everything downstream of it: idempotency so a retried request can't double-grant, validation before anything touches the database, an approval gate so a large or unusual grant gets routed for human review instead of executing unsupervised, and a savepoint/rollback so a failure partway through can't leave the org in an inconsistent state. It ships with a 6-test Apex test class covering grant, duplicate, reject, and approval-routing paths.</p>
+    <p>The point isn't the AI call, which is a single <code>@InvocableMethod</code>. The point is everything downstream of it:</p>
+    <ul class="bullets">
+      <li><strong class="term">Idempotency</strong> — a retried request can't double-grant.</li>
+      <li><strong class="term">Validation</strong> — nothing touches the database before quantity, SKU, and partner status are checked.</li>
+      <li><strong class="term">Approval gate</strong> — a large or unusual grant gets routed for human review instead of executing unsupervised.</li>
+      <li><strong class="term">Savepoint / rollback</strong> — a failure partway through can't leave the org in an inconsistent state.</li>
+    </ul>
+    <p>It ships with a <span class="hl">6-test Apex test class</span> covering grant, duplicate, reject, and approval-routing paths.</p>
 
     <div class="tag-row">
       <span class="tag">GrantEntitlementAction.cls</span>
@@ -410,14 +521,14 @@ Committed, audited entitlement write  ◀───────────┘</d
   <section class="panel" id="certs">
     <div class="section-title">05 · Certifications</div>
     <ul class="cert-list">
-      <li><span>Salesforce Certified Agentforce Specialist</span><span class="cert-date">Oct 2025</span></li>
-      <li><span>Salesforce Certified Platform Developer I</span><span class="cert-date">—</span></li>
-      <li><span>Salesforce Certified Experience Cloud Consultant</span><span class="cert-date">—</span></li>
-      <li><span>Salesforce Certified CPQ Specialist</span><span class="cert-date">—</span></li>
-      <li><span>Salesforce Certified Service Cloud Consultant</span><span class="cert-date">—</span></li>
-      <li><span>Salesforce Certified Sales Cloud Consultant</span><span class="cert-date">—</span></li>
-      <li><span>Salesforce Certified Platform App Builder</span><span class="cert-date">—</span></li>
-      <li><span>Salesforce Certified Administrator</span><span class="cert-date">—</span></li>
+      <li><span class="cert-name">Salesforce Certified Agentforce Specialist</span><span class="cert-date">Oct 2025</span></li>
+      <li><span class="cert-name">Salesforce Certified Platform Developer I</span><span class="cert-date">—</span></li>
+      <li><span class="cert-name">Salesforce Certified Experience Cloud Consultant</span><span class="cert-date">—</span></li>
+      <li><span class="cert-name">Salesforce Certified CPQ Specialist</span><span class="cert-date">—</span></li>
+      <li><span class="cert-name">Salesforce Certified Service Cloud Consultant</span><span class="cert-date">—</span></li>
+      <li><span class="cert-name">Salesforce Certified Sales Cloud Consultant</span><span class="cert-date">—</span></li>
+      <li><span class="cert-name">Salesforce Certified Platform App Builder</span><span class="cert-date">—</span></li>
+      <li><span class="cert-name">Salesforce Certified Administrator</span><span class="cert-date">—</span></li>
     </ul>
   </section>
 
