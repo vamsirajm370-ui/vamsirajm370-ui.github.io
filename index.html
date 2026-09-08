@@ -677,14 +677,15 @@
       <p class="lead">Talking-point breakdown of the KUKA AI initiative — predictive maintenance pipeline, agent/MCP tooling, and platform delivery — for walking through the work live.</p>
 
       <div class="callout">
-        <p><strong>Opening line:</strong> "I built the ingest-to-prediction pipeline on GCP, then made the agent layer that acts on it <span class="hl">governed</span> — every prediction is a proposal, every write needs a human approval, every tool call is scoped and audited."</p>
+        <p><strong>Opening line:</strong> "I designed this as a <span class="hl">cost-aware, cascaded inference pipeline</span> — a local edge model triages the raw telemetry for free, and the LLM is only invoked once a fault signature actually fires. Everything downstream of that is <span class="hl">governed</span>: every prediction is a proposal, every write needs human approval, every tool call is scoped and audited."</p>
       </div>
 
       <h2>AI Predictive Maintenance Platform</h2>
       <p><em>Goal: cut unplanned downtime, shorten service response.</em></p>
       <ul class="bullets">
         <li><strong class="term">Ingest &amp; store</strong> — controller telemetry (torque, current, vibration, position error, temperature) streamed into <span class="hl">BigQuery</span> as the single analytical store; built for HA, <span class="hl">IAM</span>-scoped access, cost-efficient compute.</li>
-        <li><strong class="term">Signal → insight</strong> — <span class="hl">Vertex AI / Gemini</span> retrieval (grounding + RAG) over the high-frequency signal to strip noise and surface pre-failure patterns, feeding ML models that forecast component-level degradation ahead of the fault.</li>
+        <li><strong class="term">Edge-first triage</strong> — a lightweight <span class="hl">local inference model</span> scores the raw high-frequency stream continuously, on-device, at <strong class="term">zero LLM token cost</strong>. Nothing leaves the edge unless it actually looks like a fault.</li>
+        <li><strong class="term">Cascaded escalation</strong> — only when the local model flags a fault signature does a windowed, <strong class="term">context-distilled</strong> slice get promoted to <span class="hl">Vertex AI / Gemini</span> for grounding + RAG. This <strong class="term">selective retrieval</strong> keeps cloud LLM invocation sparse instead of running on every tick of raw signal, feeding ML models that forecast component-level degradation ahead of the fault.</li>
         <li><strong class="term">Human-in-the-loop</strong> — pipeline connects to enterprise systems of record through an <span class="hl">Apigee X</span>-fronted <span class="hl">MCP</span> gateway; a prediction raises a risk alert, never a silent action. Approval is a hard gate before any write.</li>
         <li><strong class="term">Automation after approval</strong> — service case, spare-parts order, field-tech dispatch all fire automatically once approved, removing the slowest part of the old manual cycle.</li>
       </ul>
@@ -710,8 +711,10 @@
 
       <div class="tag-row">
         <span class="tag">BigQuery</span>
+        <span class="tag">Edge Inference</span>
+        <span class="tag">Cascaded Inference</span>
         <span class="tag">Vertex AI / Gemini</span>
-        <span class="tag">RAG</span>
+        <span class="tag">Selective RAG</span>
         <span class="tag">MCP</span>
         <span class="tag">Apigee X</span>
         <span class="tag">A2A</span>
@@ -722,13 +725,25 @@
       <div class="diagram"><span class="d-node">Controller Telemetry</span> <span class="d-note">(torque, current, vibration, position error, temp)</span>
       <span class="d-arrow">│</span>
       <span class="d-arrow">▼</span>
-<span class="d-node">BigQuery</span> <span class="d-note">(HA · IAM-scoped · single analytical store)</span>
+<span class="d-node">BigQuery</span> <span class="d-note">(HA · IAM-scoped · durable analytical store)</span>
       <span class="d-arrow">│</span>
       <span class="d-arrow">▼</span>
-<span class="d-node">Vertex AI / Gemini</span> <span class="d-note">(RAG grounding over high-frequency signal)</span>
+<span class="d-node">Local Edge Model</span> <span class="d-note">(on-device fault classifier — zero LLM tokens)</span>
       <span class="d-arrow">│</span>
       <span class="d-arrow">▼</span>
-<span class="d-node">ML Forecast</span> <span class="d-note">(component-level degradation, ahead of fault)</span>
+<span class="d-step">Fault signature detected?</span>
+      <span class="d-arrow">├──</span> <span class="d-note">No  → keep monitoring · no LLM call · no token spend</span>
+      <span class="d-arrow">│</span>
+     <span class="d-step">Yes</span>
+      <span class="d-arrow">│</span>
+      <span class="d-arrow">▼</span>
+<span class="d-node">Context Distillation</span> <span class="d-note">(windowed, fault-relevant slice only — not the raw stream)</span>
+      <span class="d-arrow">│</span>
+      <span class="d-arrow">▼</span>
+<span class="d-node">Vertex AI / Gemini RAG</span> <span class="d-note">(selective grounding — triggered, not continuous)</span>
+      <span class="d-arrow">│</span>
+      <span class="d-arrow">▼</span>
+<span class="d-node">Gemini Reasoning</span> <span class="d-note">(root-cause + degradation forecast on curated context)</span>
       <span class="d-arrow">│</span>
       <span class="d-arrow">▼</span>
 <span class="d-node">Apigee X → MCP Gateway</span> <span class="d-note">(authN/authZ · scoped tools · audit)</span>
@@ -741,7 +756,7 @@
       <span class="d-arrow">│</span>
       <span class="d-arrow">▼</span>
 <span class="d-node">Automated fulfillment</span> <span class="d-note">— service case · parts order · field-tech dispatch</span></div>
-      <div class="diagram-caption">Telemetry → BigQuery → Vertex AI/Gemini forecast → Apigee/MCP gateway → human approval → automated fulfillment.</div>
+      <div class="diagram-caption">Local edge model triages every tick for free — only a detected fault escalates a distilled context slice to Vertex AI/Gemini RAG → Gemini reasoning → Apigee/MCP gateway → human approval → automated fulfillment.</div>
 
       <h2>Challenges I Might Get Asked About</h2>
       <p><em>Likely follow-ups on the call — challenge on the left, my answer on the right.</em></p>
