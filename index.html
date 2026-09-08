@@ -744,31 +744,31 @@
       <div class="diagram-caption">Telemetry → BigQuery → Vertex AI/Gemini forecast → Apigee/MCP gateway → human approval → automated fulfillment.</div>
 
       <h2>Challenges I Might Get Asked About</h2>
-      <p><em>Likely follow-ups on the call — challenge on the left, my one-line answer on the right.</em></p>
+      <p><em>Likely follow-ups on the call — challenge on the left, my answer on the right.</em></p>
       <div class="qa-grid">
-        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">A prediction could trigger an unintended production change.</div></div>
-        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Predictions only ever raise a risk alert — approval is a hard gate before any write.</div></div>
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">The model flags a likely component failure before it happens. If that prediction were allowed to act on its own, a false positive could trigger an unnecessary parts order or dispatch. That risk has to be designed out, not just monitored.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Predictions never write directly to any system — they only ever raise a risk alert. A human has to review and approve the alert before any downstream action fires. That makes the AI a proposer, not an actor, so a bad prediction costs nothing more than a dismissed alert.</div></div>
 
-        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">High-frequency sensor data is noisy and hard to model directly.</div></div>
-        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">RAG/grounding on Vertex AI filters and contextualizes the signal before forecasting.</div></div>
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">Controller telemetry like torque, vibration, and current updates constantly and includes a lot of normal operational noise. Feeding that raw stream straight into a forecasting model buries the real pre-failure signal. The system needs a way to separate meaningful patterns from routine fluctuation.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">A Vertex AI/Gemini retrieval layer grounds the raw signal before it reaches the forecasting model. RAG surfaces the patterns that actually precede failure and filters out routine noise. Only that distilled context feeds the degradation model, which keeps predictions accurate.</div></div>
 
-        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">An agent could call a tool it isn't authorized to use.</div></div>
-        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Every MCP tool is a typed, scoped contract enforced at the Apigee X gateway.</div></div>
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">Once an agent can call real enterprise tools, the risk shifts from bad output to bad action. Without strict boundaries, an agent could reach a tool or system it was never meant to touch. That's a much bigger blast radius than a wrong chat answer.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Every MCP tool is defined as a typed, scoped contract before it's ever wired up. The Apigee X gateway enforces those scopes centrally, so an agent can only call what its identity is explicitly authorized for. Nothing reaches an enterprise system without passing through that gate.</div></div>
 
-        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">Prompt-injection could trigger an unauthorized tool call.</div></div>
-        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Agent identity, least-privilege scopes, and gateway policy — enforced independent of model output.</div></div>
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">An agent that reads external or untrusted content is exposed to prompt-injection — text designed to make it take an action it shouldn't. If tool access relied only on the model behaving correctly, that's a single point of failure. The defense has to sit outside the model itself.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Access is enforced by agent identity and least-privilege scopes at the gateway, not by trusting the model's judgment. Even if a prompt tries to talk the agent into an unauthorized call, the gateway simply won't allow it. Policy enforcement and full observability mean it's caught and logged either way.</div></div>
 
-        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">Agent tooling gets rebuilt per project instead of reused.</div></div>
-        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Tool contracts are typed and centrally registered, discoverable by any agent.</div></div>
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">Every new AI project tends to reinvent its own version of the same integrations. That duplicates effort and creates inconsistent security and error handling across teams. It also makes the whole system harder to govern and audit.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Each MCP tool surface is specified as a typed contract up front — inputs, outputs, permissions, and failure behavior. Once built, it's registered centrally so any agent can discover and reuse it instead of rebuilding it. That turns tooling into shared infrastructure instead of one-off project code.</div></div>
 
-        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">Shipping AI changes fast risks breaking 100,000+ users.</div></div>
-        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Strict CI/CD — staged environments, controlled release, rollback ready before every deploy.</div></div>
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">The platform serves a very large, active user base, so a bad deploy has real consequences. Moving fast on AI features can't come at the cost of stability. The team needed a release process that supported speed without gambling on production.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Every change goes through staged environments and validation before it reaches production. Deployment governance and a controlled release process catch problems early, and rollback is always prepared in advance. That combination lets the team ship quickly while keeping the platform stable.</div></div>
 
-        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">Connecting a modern agent stack to legacy SAP-era systems safely.</div></div>
-        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">REST + Named Credentials + JWT — the legacy-side contract never changes.</div></div>
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">SAP, IQWorks, and Visual Components weren't built with AI agents in mind. Bolting a modern agent layer directly onto them risks breaking assumptions those systems depend on. The integration needed to respect existing contracts, not rewrite them.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Integrations run over REST APIs using Named Credentials and JWT authentication, the same pattern those systems already trust. The legacy side never has to change to support the new agent layer. That kept the rollout low-risk for systems the business depends on every day.</div></div>
 
-        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">Balancing HA, latency, and cost across one shared GCP platform.</div></div>
-        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Right-sized compute per workload, plus IAM scoping and blast-radius containment by design.</div></div>
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">High availability, low latency, and cost efficiency usually pull in different directions. Over-provisioning for availability gets expensive fast; under-provisioning risks downtime. The platform has to hit all three targets at once, not trade one off for another.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Compute is sized per workload instead of applying one blanket configuration everywhere. IAM scoping and blast-radius containment limit how far any single failure or cost spike can spread. That keeps availability, latency, and cost in balance without overbuilding.</div></div>
       </div>
 
       <h3>Prior role at KUKA</h3>
