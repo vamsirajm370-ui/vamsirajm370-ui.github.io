@@ -352,6 +352,43 @@
     padding:4px 10px;
     white-space:nowrap;
   }
+  .qa-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px 20px;
+    margin:20px 0 30px;
+    max-width:1300px;
+  }
+  .qa-challenge, .qa-answer{
+    border-radius:var(--radius);
+    padding:14px 18px;
+    box-shadow:var(--shadow);
+    border:1px solid;
+  }
+  .qa-challenge{
+    background:var(--gold-soft);
+    border-color:var(--gold);
+    border-left:4px solid var(--gold);
+  }
+  .qa-answer{
+    background:var(--accent-soft);
+    border-color:var(--accent);
+    border-left:4px solid var(--accent);
+  }
+  .qa-label{
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    margin-bottom:6px;
+  }
+  .qa-challenge .qa-label{color:var(--gold);}
+  .qa-answer .qa-label{color:var(--accent-strong);}
+  .qa-text{font-size:14.5px;font-weight:600;line-height:1.45;color:var(--fg);}
+  @media (max-width:700px){
+    .qa-grid{grid-template-columns:1fr;}
+  }
   .link-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -705,6 +742,34 @@
       <span class="d-arrow">▼</span>
 <span class="d-node">Automated fulfillment</span> <span class="d-note">— service case · parts order · field-tech dispatch</span></div>
       <div class="diagram-caption">Telemetry → BigQuery → Vertex AI/Gemini forecast → Apigee/MCP gateway → human approval → automated fulfillment.</div>
+
+      <h2>Challenges I Might Get Asked About</h2>
+      <p><em>Likely follow-ups on the call — challenge on the left, my one-line answer on the right.</em></p>
+      <div class="qa-grid">
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">A prediction could trigger an unintended production change.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Predictions only ever raise a risk alert — approval is a hard gate before any write.</div></div>
+
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">High-frequency sensor data is noisy and hard to model directly.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">RAG/grounding on Vertex AI filters and contextualizes the signal before forecasting.</div></div>
+
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">An agent could call a tool it isn't authorized to use.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Every MCP tool is a typed, scoped contract enforced at the Apigee X gateway.</div></div>
+
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">Prompt-injection could trigger an unauthorized tool call.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Agent identity, least-privilege scopes, and gateway policy — enforced independent of model output.</div></div>
+
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">Agent tooling gets rebuilt per project instead of reused.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Tool contracts are typed and centrally registered, discoverable by any agent.</div></div>
+
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">Shipping AI changes fast risks breaking 100,000+ users.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Strict CI/CD — staged environments, controlled release, rollback ready before every deploy.</div></div>
+
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">Connecting a modern agent stack to legacy SAP-era systems safely.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">REST + Named Credentials + JWT — the legacy-side contract never changes.</div></div>
+
+        <div class="qa-challenge"><div class="qa-label">Challenge</div><div class="qa-text">Balancing HA, latency, and cost across one shared GCP platform.</div></div>
+        <div class="qa-answer"><div class="qa-label">Answer</div><div class="qa-text">Right-sized compute per workload, plus IAM scoping and blast-radius containment by design.</div></div>
+      </div>
 
       <h3>Prior role at KUKA</h3>
       <p><strong>Senior Application Developer</strong> · Oct 2017 – Dec 2021 — delivered internal and customer-facing enterprise applications for a global industrial manufacturer across sales, service, and external community environments; built complex workflows, async processing, access models, and registration experiences; contributed to release quality, environment strategy, and production troubleshooting.</p>
