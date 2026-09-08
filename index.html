@@ -469,6 +469,7 @@
       <button data-tab="stack">04 · Tech Stack</button>
       <button data-tab="certs">05 · Certifications</button>
       <button data-tab="contact">06 · Open To</button>
+      <button data-tab="kuka">07 · KUKA</button>
     </nav>
 
     <div class="sidebar-footer">
@@ -631,6 +632,82 @@
         <span>Vamsi Maganti · Austin, TX</span>
         <span>Built as a static site, hosted on GitHub Pages</span>
       </footer>
+    </section>
+
+    <!-- 07 · KUKA -->
+    <section class="panel" id="kuka">
+      <div class="section-title">07 · KUKA — Predictive Maintenance &amp; Agent Platform</div>
+      <p class="lead">Talking-point breakdown of the KUKA AI initiative — predictive maintenance pipeline, agent/MCP tooling, and platform delivery — for walking through the work live.</p>
+
+      <div class="callout">
+        <p><strong>Opening line:</strong> "I built the ingest-to-prediction pipeline on GCP, then made the agent layer that acts on it <span class="hl">governed</span> — every prediction is a proposal, every write needs a human approval, every tool call is scoped and audited."</p>
+      </div>
+
+      <h2>AI Predictive Maintenance Platform</h2>
+      <p><em>Goal: cut unplanned downtime, shorten service response.</em></p>
+      <ul class="bullets">
+        <li><strong class="term">Ingest &amp; store</strong> — controller telemetry (torque, current, vibration, position error, temperature) streamed into <span class="hl">BigQuery</span> as the single analytical store; built for HA, <span class="hl">IAM</span>-scoped access, cost-efficient compute.</li>
+        <li><strong class="term">Signal → insight</strong> — <span class="hl">Vertex AI / Gemini</span> retrieval (grounding + RAG) over the high-frequency signal to strip noise and surface pre-failure patterns, feeding ML models that forecast component-level degradation ahead of the fault.</li>
+        <li><strong class="term">Human-in-the-loop</strong> — pipeline connects to enterprise systems of record through an <span class="hl">Apigee X</span>-fronted <span class="hl">MCP</span> gateway; a prediction raises a risk alert, never a silent action. Approval is a hard gate before any write.</li>
+        <li><strong class="term">Automation after approval</strong> — service case, spare-parts order, field-tech dispatch all fire automatically once approved, removing the slowest part of the old manual cycle.</li>
+      </ul>
+
+      <h2>Agent Architecture &amp; Tooling</h2>
+      <p><em>Goal: make AI reusable across the business instead of per-project.</em></p>
+      <ul class="bullets">
+        <li>MCP tool surfaces specified as <strong class="term">typed contracts</strong> before implementation — explicit input/output schemas, scoped permissions, failure semantics, idempotent writes.</li>
+        <li>Built &amp; operate the <span class="hl">Apigee X</span> agent/MCP gateway — the governed control point for agent-to-tool and <span class="hl">Agent2Agent (A2A)</span> traffic: authN/authZ, tool registration &amp; discovery, rate limiting, policy enforcement, full observability.</li>
+        <li>Defined <strong class="term">agent identity</strong> and least-privilege access patterns — auditable credentials, scoped tool access, controlled data exposure, defenses against prompt-injection and unauthorized tool invocation.</li>
+        <li>Extended the enterprise data model for grounding/contextual retrieval on <span class="hl">Vertex AI / Gemini</span> — agents query structured context instead of inferring it.</li>
+        <li>Designed AI-ready intake &amp; routing workflows with agent action orchestration layered over existing enterprise processes.</li>
+      </ul>
+
+      <h2>Platform Engineering &amp; Delivery</h2>
+      <p><em>Goal: keep a large install base stable while shipping fast.</em></p>
+      <ul class="bullets">
+        <li>Owned integration frameworks across <span class="hl">SAP</span>, <span class="hl">IQWorks</span>, <span class="hl">Visual Components</span>, and <span class="hl">IQOT</span> — REST APIs, Named Credentials, JWT auth.</li>
+        <li>Architected secure, highly available services on <span class="hl">Google Cloud</span> — IAM, networking, compute sizing, failure-mode analysis, blast-radius containment.</li>
+        <li>Ran CI/CD end to end — validation, deployment governance, environment strategy, controlled release, rollback prep, deployment troubleshooting.</li>
+        <li>Supported <span class="hl">100,000+ external</span> and <span class="hl">5,000+ internal</span> users; led architecture &amp; code reviews, mentored developers, technical point of contact across engineering, product, ops.</li>
+      </ul>
+
+      <div class="tag-row">
+        <span class="tag">BigQuery</span>
+        <span class="tag">Vertex AI / Gemini</span>
+        <span class="tag">RAG</span>
+        <span class="tag">MCP</span>
+        <span class="tag">Apigee X</span>
+        <span class="tag">A2A</span>
+        <span class="tag">GCP IAM</span>
+        <span class="tag">CI/CD</span>
+      </div>
+
+      <div class="diagram"><span class="d-node">Controller Telemetry</span> <span class="d-note">(torque, current, vibration, position error, temp)</span>
+      <span class="d-arrow">│</span>
+      <span class="d-arrow">▼</span>
+<span class="d-node">BigQuery</span> <span class="d-note">(HA · IAM-scoped · single analytical store)</span>
+      <span class="d-arrow">│</span>
+      <span class="d-arrow">▼</span>
+<span class="d-node">Vertex AI / Gemini</span> <span class="d-note">(RAG grounding over high-frequency signal)</span>
+      <span class="d-arrow">│</span>
+      <span class="d-arrow">▼</span>
+<span class="d-node">ML Forecast</span> <span class="d-note">(component-level degradation, ahead of fault)</span>
+      <span class="d-arrow">│</span>
+      <span class="d-arrow">▼</span>
+<span class="d-node">Apigee X → MCP Gateway</span> <span class="d-note">(authN/authZ · scoped tools · audit)</span>
+      <span class="d-arrow">│</span>
+      <span class="d-arrow">▼</span>
+<span class="d-step">Risk Alert → Customer</span> <span class="d-note">(no silent action)</span>
+      <span class="d-arrow">│</span>
+      <span class="d-arrow">▼</span>
+<span class="d-step">Human Approval</span> <span class="d-note">◀── hard gate</span>
+      <span class="d-arrow">│</span>
+      <span class="d-arrow">▼</span>
+<span class="d-node">Automated fulfillment</span> <span class="d-note">— service case · parts order · field-tech dispatch</span></div>
+      <div class="diagram-caption">Telemetry → BigQuery → Vertex AI/Gemini forecast → Apigee/MCP gateway → human approval → automated fulfillment.</div>
+
+      <h3>Prior role at KUKA</h3>
+      <p><strong>Senior Application Developer</strong> · Oct 2017 – Dec 2021 — delivered internal and customer-facing enterprise applications for a global industrial manufacturer across sales, service, and external community environments; built complex workflows, async processing, access models, and registration experiences; contributed to release quality, environment strategy, and production troubleshooting.</p>
     </section>
 
   </main>
